@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small_____</title>
+<style>
+  *, *::before, *::after {
+    margin: 0; padding: 0; box-sizing: border-box;
+    transition: none !important;
+    border-radius: 0 !important;
+    scroll-behavior: auto !important;
+  }
+
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    color: #1e1e1e;
+    background: linear-gradient(180deg, #1b3a5c 0%, #3a7bd5 40%, #6db3f2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  .page {
+    width: min(90vw, 1400px);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ── Aero panel ── */
+  .panel {
+    border: 1px solid #3c6ea5;
+    background: rgba(220, 232, 245, 0.82);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.2) inset,
+      0 2px 8px rgba(0,0,0,0.3);
+    padding: 10px;
+  }
+
+  .panel-header {
+    background: linear-gradient(180deg, #5a8abf 0%, #3d6fa0 100%);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border: 1px solid #2a5a8a;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .panel-header-text { flex: 1; }
+
+  .well {
+    border: 2px inset #b0c4de;
+    background: #fff;
+    scrollbar-width: thin;
+    scrollbar-color: #4a6e8c #b0c4d8;
+  }
+
+  .raised {
+    border: 2px outset #b0c4de;
+    background: linear-gradient(180deg, #e8eef5 0%, #d0dbe8 100%);
+  }
+
+  a { color: #003399; text-decoration: underline; font-size: 11px; }
+  a:hover { background: #cce0f5; }
+  a:visited { color: #551a8b; }
+
+  /* ── Win7 scrollbars (thin, dark blue) ── */
+  .well::-webkit-scrollbar { width: 10px; height: 10px; }
+  .well::-webkit-scrollbar-track { background: #b0c4d8; border: 1px solid #7a9ab8; }
+  .well::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #6a8cac 0%, #4a6e8c 100%);
+    border: 1px solid #3a5a74;
+  }
+  .well::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #5a7c9c 0%, #3a5e7c 100%);
+  }
+  .well::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  img.placeholder {
+    display: block;
+    background: #d0dbe8;
+    border: 1px solid #8899aa;
+    object-fit: cover;
+  }
+
+  .date { font-size: 10px; color: #667788; }
+
+  /* ══════════════════════
+     PROFILE ROW
+  ══════════════════════ */
+  .profile-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .avatar-well {
+    width: 140px;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 8px;
+  }
+
+  .bio-well { flex: 1; padding: 12px; }
+  .bio-well h1 { font-size: 16px; font-weight: 700; color: #1a3a5c; margin-bottom: 2px; }
+  .bio-well .subtitle { font-size: 11px; font-style: italic; color: #556677; margin-bottom: 8px; }
+  .bio-well p { font-size: 12px; line-height: 1.5; color: #334455; }
+
+  .links-box { width: 170px; flex-shrink: 0; padding: 0; }
+  .links-box .panel-header { margin: 0; }
+  .links-list { padding: 6px 8px; display: flex; flex-direction: column; gap: 2px; }
+  .links-list a { display: block; padding: 3px 4px; border: 1px solid transparent; }
+  .links-list a:hover { border-color: #7aaacc; }
+
+  /* ══════════════════════
+     CONTENT ROW (media sidebar + projects)
+  ══════════════════════ */
+  .content-row {
+    position: relative;
+    padding-left: 170px;
+  }
+
+  /* ── Media sidebar ── */
+  .media-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 160px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.2) inset,
+      0 2px 8px rgba(0,0,0,0.3);
+  }
+  .media-panel .panel-header { flex-shrink: 0; }
+
+  .media-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    min-height: 0;
+  }
+
+  .media-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 5px 8px;
+    border-bottom: 1px solid #d0dbe8;
+    font-size: 11px;
+  }
+  .media-item:hover { background: #cce0f5; }
+  .media-item span { color: #1e1e1e; }
+
+  /* ── Projects ── */
+  .projects-panel {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 2px outset #b0c4de;
+  }
+
+  .projects-panel > .panel-header {
+    margin: -10px -10px 10px -10px;
+    flex-shrink: 0;
+  }
+
+  /* Back button: white on red, boxed, Win7 style */
+  .back-btn {
+    display: none;
+    background: linear-gradient(180deg, #e44 0%, #c22 100%);
+    border: 1px outset #a00;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0 8px 2px 4px;
+    line-height: 1;
+    font-family: inherit;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.15) inset;
+  }
+  .back-btn:hover {
+    background: linear-gradient(180deg, #f55 0%, #d33 100%);
+  }
+
+  .projects-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .project-scroll {
+    overflow-x: auto;
+    padding: 8px;
+  }
+
+  .project-track { display: flex; gap: 10px; }
+
+  .project-card {
+    min-width: 150px;
+    width: 150px;
+    flex-shrink: 0;
+    border: 2px outset #b0c4de;
+    background: linear-gradient(180deg, #f4f7fb 0%, #e0eaf2 100%);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  .project-card:hover { border-color: #5a8abf; }
+  .project-card:active { border-style: inset; }
+  .project-card img.placeholder { width: 100%; height: 80px; }
+
+  .project-card-body {
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+  }
+  .project-card-body strong { font-size: 11px; font-weight: 700; color: #1a3a5c; }
+  .project-card-body span { font-size: 10px; color: #445566; }
+
+  .see-more {
+    margin-top: auto;
+    font-size: 10px;
+    color: #003399;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .see-more:hover { background: #cce0f5; }
+
+  /* ── Blow-up detail view ── */
+  .project-detail { display: none; padding: 0; flex: 1; }
+  .project-detail-well {
+    border: 2px inset #b0c4de;
+    background: #fff;
+    padding: 14px;
+    height: 100%;
+  }
+  .project-detail-inner { overflow: auto; }
+  .project-detail img.placeholder { float: left; width: 300px; height: auto; margin: 0 16px 8px 0; }
+  .project-detail-text { display: block; }
+  .project-detail-text > * + * { margin-top: 6px; }
+  .detail-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .project-detail-text h2 { font-size: 14px; font-weight: 700; color: #1a3a5c; }
+  .project-detail-text p { font-size: 12px; line-height: 1.5; color: #334455; }
+  .detail-extra-imgs { display: none; flex-wrap: wrap; gap: 8px; border-top: 1px solid #b0c4de; padding-top: 10px; margin-top: 8px; clear: left; width: 100%; }
+  .detail-extra-imgs img { max-width: 260px; height: auto; }
+
+  /* ── CRT flash ── */
+  @keyframes crt-flash {
+    0%   { opacity: 1; background: #fff; }
+    40%  { opacity: 0.7; background: #d0e8ff; }
+    70%  { opacity: 0.3; background: #fff; }
+    100% { opacity: 0; background: transparent; }
+  }
+  .crt-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .crt-overlay.flash {
+    animation: crt-flash 180ms steps(4) forwards !important;
+  }
+
+  /* ══════════════════════
+     FOOTER
+  ══════════════════════ */
+  .footer {
+    border: 2px outset #b0c4de;
+    background: linear-gradient(180deg, #5a8abf 0%, #3d6fa0 100%);
+    padding: 4px 8px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+  }
+
+  /* ══════════════════════
+     RESPONSIVE
+  ══════════════════════ */
+  @media (max-width: 740px) {
+    body { padding: 12px 6px; }
+
+    .profile-row {
+      flex-wrap: wrap;
+    }
+    .avatar-well {
+      width: 130px;
+      min-height: auto;
+      padding: 8px;
+    }
+    .avatar-well img.placeholder { width: 110px; height: 130px; }
+    .bio-well { flex: 1; min-width: 0; }
+    .links-box { width: 100%; }
+
+    .content-row {
+      position: static;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .media-panel {
+      position: static;
+      width: 100%;
+      max-height: 150px;
+    }
+    .media-list {
+      overflow-y: auto;
+      max-height: 110px;
+    }
+
+    .project-card {
+      min-width: 130px;
+      width: 130px;
+    }
+    .project-card img.placeholder { height: 65px; }
+
+    .project-detail img.placeholder {
+      float: none;
+      width: 100%;
+      margin: 0 0 8px 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-card {
+      min-width: 115px;
+      width: 115px;
+    }
+    .project-card img.placeholder { height: 55px; }
+    .project-detail img.placeholder { width: 100%; }
+  }
+
+  @media (min-width: 1200px) {
+    body { font-size: 14px; }
+    .panel { padding: 14px; }
+    .panel-header { font-size: 13px; padding: 6px 10px; }
+    .projects-panel > .panel-header { margin: -14px -14px 14px -14px; }
+
+    .content-row { padding-left: 200px; }
+    .media-panel { width: 190px; }
+    .media-item { padding: 7px 10px; font-size: 13px; }
+    .media-item .date { font-size: 11px; }
+
+    .avatar-well { width: 170px; min-height: 190px; }
+    .avatar-well img.placeholder { width: 140px; height: 165px; }
+    .bio-well h1 { font-size: 20px; }
+    .bio-well .subtitle { font-size: 13px; }
+    .bio-well p { font-size: 14px; }
+    .links-box { width: 300px; }
+    .links-list a { font-size: 13px; }
+
+    .project-card { min-width: 190px; width: 190px; }
+    .project-card img.placeholder { height: 105px; }
+    .project-card-body { padding: 8px 10px; gap: 4px; }
+    .project-card-body strong { font-size: 13px; }
+    .project-card-body span { font-size: 11px; }
+    .see-more { font-size: 11px; }
+    .date { font-size: 11px; }
+
+    .project-detail img.placeholder { width: 400px; height: auto; }
+    .project-detail-text h2 { font-size: 18px; }
+    .project-detail-text p { font-size: 14px; }
+
+    .footer { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ═══ Profile ═══ -->
+  <div class="panel">
+    <div class="profile-row">
+      <div class="avatar-well well">
+        <img class="placeholder" alt="Avatar photo" src="Me.png" width="110" height="130">
+      </div>
+      <div class="bio-well well">
+        <h1>Small_____</h1>
+        <div class="subtitle">"...and so do all who live to see such times. But that is not for them to decide. All we have to decide is what to do with the time that is given us."</div>
+        <p>Hi, I'm Small! This is my personal website for sharing my projects, experiences, and maybe, at some point in the future, my blog posts. I'm passionate about inspiring and enabling the next generation of developers to get out there and properly build shit. <br><br>At least with this online persona, I'm mostly involved in the ULTRAKILL Modding and Mapping communities, but I've also done some non-ULTRAKILL projects that you can explore below. Click on any of these projects to learn more or play around with them!</p>
+      </div>
+      <div class="links-box raised">
+        <div class="panel-header">Links</div>
+        <div class="links-list">
+          ☕ Ko-fi: <a href="https://ko-fi.com/small_____" target="_blank">ko-fi.com/small_____</a>
+          🎬 Letterboxd: <a href="https://letterboxd.com/small___/" target="_blank">letterboxd.com/small____/</a>
+          📹 YouTube: <a href="https://www.youtube.com/@small_____h7w/" target="_blank">www.youtube.com/@small_____h7w/</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Content: Media sidebar + Projects ═══ -->
+  <div class="content-row">
+
+    <!-- Media sidebar (vertical scroll, stretches to match projects) -->
+    <div class="media-panel raised">
+      <div class="panel-header">Media</div>
+      <div class="media-list well">
+        <div class="media-item">
+          <span>The Wolf of Wall Street (2013)</span>
+          <span class="date">2026-06-21</span>
+        </div>
+        <!-- ┌─ MEDIA ITEM (copy to add more) ─┐ -->
+        <div class="media-item">
+          <span>The Outsiders (2026)</span>
+          <span class="date">2026-06-19</span>
+        </div>
+        <!-- └─ END MEDIA ITEM ─┘ -->
+        <div class="media-item">
+          <span>Disclosure Day (2026)</span>
+          <span class="date">2026-06-16</span>
+        </div>
+        <div class="media-item">
+          <span>Westworld (2016)</span>
+          <span class="date">2026-06-03</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="projects-panel panel" id="projects-panel">
+      <div class="crt-overlay" id="crt-overlay"></div>
+
+      <div class="panel-header">
+        <button class="back-btn" id="back-btn" title="Back to projects">&#x25C0;</button>
+        <span class="panel-header-text" id="projects-header-text">Projects</span>
+      </div>
+
+      <!-- Grid view -->
+      <div class="projects-grid" id="projects-grid">
+
+        <!-- Row 1 -->
+        <div class="project-scroll well">
+          <div class="project-track">
+
+            <!--
+            ┌──────────────────────────────────────────────┐
+            │  PROJECT CARD TEMPLATE                       │
+            │  Copy this block into a .project-track div.  │
+            │                                              │
+            │  data-title      : blow-up title             │
+            │  data-short-desc : one-line card teaser      │
+            │  data-desc       : full description          │
+            │  data-date       : date string               │
+            │  data-img        : image src ("" for none)   │
+            │  data-link       : URL (optional)            │
+            │  data-imgs       : pipe-separated extra imgs │
+            └──────────────────────────────────────────────┘
+            -->
+            <div class="project-card"
+                 data-title="CGSpawnFilter Mod"
+                 data-short-desc="Remove unwanted enemies from The Cyber Grind."
+                 data-desc="'How cockroaches look at you when you step on them 50 times.'
+
+                  There are certain enemies in this game that just suck to play around, so I just added a feature that removes your chosen enemies from the cybergrind. This project is actually my first published Thunderstore mod!
+
+                  It uses plugin configurator for the settings and basic harmonypatch stuff for actually changing the game logic. Main challenge was navigating the spaghetticode that is mid-wave enemy activation (honestly still a bit of a work in progress)."
+                 data-date="2026-06-19"
+                 data-img="CGSpawnFilterMod.png"
+                 data-link="https://thunderstore.io/c/ultrakill/p/SmallTeam/CGSpawnFilter/"
+                 data-imgs="Schisms.png"></div>
+
+            <div class="project-card"
+                 data-title="Cania"
+                 data-short-desc="Snow-themed ULTRAKILL Custom Level for RudeJam."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-date="2025-05-24"
+                 data-img="Cania.png"></div>
+
+            <div class="project-card"
+                 data-title="Whitebox"
+                 data-short-desc="ULTRAKILL Custom Level speedmap."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-date="2025-05-24"
+                 data-img="Whitebox.png"></div>
+
+            <div class="project-card"
+                 data-title="Rude Unity Tutorial Series"
+                 data-short-desc="YouTube tutorial series for creating custom levels."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-date="2025-05-21"
+                 data-img="CustomLevelsYoutubeSeries.png"></div>
+
+            <div class="project-card"
+                 data-title="ULTRAKILL Customs Wiki"
+                 data-short-desc="Comprehensive ULTRAKILL docs and mapping guides."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-date="2026-05-03"
+                 data-img="UltrakillCustomLevelsWiki.png"></div>
+
+            <div class="project-card"
+                 data-title="Mahjong 8-S"
+                 data-short-desc="ULTRAKILL Mahjong Solitaire custom level and solvability."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-date="2026-04-26"
+                 data-img="Mahjong.png"></div>
+            
+            <div class="project-card"
+                 data-title="ULTRAKILL /// REPRISE"
+                 data-short-desc="Superdifficult ongoing ULTRAKILL Custom Level series."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-date="2026-03-24"
+                 data-img="Reprise.png"></div>
+
+            <div class="project-card"
+                 data-title="AngryLevelLoader"
+                 data-short-desc="Contributor to the ULTRAKILL custom level loader."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-date="2026-03-01"
+                 data-img="AngryLevelLoader.png"></div>
+
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="project-scroll well">
+          <div class="project-track">
+            <div class="project-card"
+                 data-title="Personal Website"
+                 data-short-desc="This site! Showcase of my projects and experiences."
+                 data-desc="This website! I made this personal site because I realized I had a lot of projects and I didn't like sending people unique urls for all of them (plus personal websites are a pretty great part of web 1.0 and I think they should make a comeback). 
+
+                  There's not really anything super interesting about this site, just typical frontendslop; artstyle is ripped from a game I'm working on. Windows 7 style because I think it's pretty. "
+                 data-link="https://smallkloon.github.io/"
+                 data-date="2026-06-22"
+                 data-img="Site.png"></div>
+
+            <div class="project-card"
+                 data-title="Uber Engineer Simulator"
+                 data-short-desc="Web-based tokenmaxxing incremental game."
+                 data-desc="Press the above link to play the game!
+
+                  Basically just a little incremental game for web inspired by Universal Paperclips and Antimatter Dimensions. 
+
+                  Not too much interesting about this game, but it's my first fully complete long-form one! The idea of it was that I wanted to explore RSI and what happens when a game stops needing you through a genre focused singularly on making the number go higher. I also get to make lighthearted fun of my industry which is always good.
+
+                  Uber Engineer Simulator was also the first game I uploaded to Github pages which is kinda neat! Reception has been good so maybe I'll revisit an expansion sometime in the future. 
+
+                  Otherwise, this project just taught me how to balance progression and pacing, save stuff to local browser storage, and generally finish a multiple hour game start-to-end! Was loads of fun."
+                  data-link="https://smallkloon.github.io/uber-engineer-simulator/"
+                 data-date="2026-06-18"
+                 data-img="UberEngineerSimulator.png"></div>
+
+            <div class="project-card"
+                 data-title="Kickbench"
+                 data-short-desc="ARC-style puzzle game."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-link="https://smallkloon.github.io/kickbench/"
+                 data-date="2026-06-11"
+                 data-img="Kickbench.png"></div>
+
+            <div class="project-card"
+                 data-title="Autodungeon"
+                 data-short-desc="Hypixel-style dungeon generation algorithm."
+                 data-desc="Full project description goes here. Replace this with real content."
+                 data-date="2026-06-11"
+                 data-img="Autodungeon.png"></div>
+
+            <div class="project-card"
+                 data-title="RepriseGPT"
+                 data-short-desc="Pre-LLM adaptive chatbot for Discord."
+                 data-desc="RGPT is my stupid chud son; probably the most value per minute spent I've ever gotten out of a project. Over the course of 45 minutes, I hobbled together some sentence splicing, grammar normalization (through libretranslating back and forth between a bunch of languages), and pronoun swaps to create Argie-- the chatbot for the Ultrakill Reprise Discord server: universally adored by 100+ members. 
+                 
+                 The project was inspired by a talk I attended about pre-LLM chatbots; I wanted to make my own for this community and also finally gain proper experience with Discord's API and bot system.
+
+                  Unfortunately, after a couple weeks of him randomly speaking Chinese, saying completely out of pocket things, and occasionally having strokes, we had to put him down. Argie was causing my electricity bill to spike and had similar water usage to that of a small town. I wasn't about to pay AWS to host this idiot, so sadly he is dead for good now. 
+
+                  Rip Argie :("
+                 data-date="2026-04-29"
+                 data-img="Argie.png"
+                 data-imgs="Adopted.png"
+                 ></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Blow-up detail view -->
+      <div class="project-detail" id="project-detail">
+        <div class="project-detail-well">
+          <div class="project-detail-inner">
+            <img class="placeholder" id="detail-img" alt="Project image" src="" width="300" height="200">
+            <div class="project-detail-text">
+              <div class="detail-title-row">
+                <h2 id="detail-title"></h2>
+                <span class="date" id="detail-date"></span>
+              </div>
+              <a id="detail-link" href="" target="_blank" style="display:none"></a>
+              <p id="detail-desc"></p>
+            </div>
+            <div id="detail-extra-imgs" class="detail-extra-imgs"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ Footer ═══ -->
+  <div class="footer">&#169; Small_____ 2026</div>
+
+</div>
+
+<template id="project-card-tpl">
+  <img class="placeholder" alt="Project thumbnail" src="" width="150" height="80">
+  <div class="project-card-body">
+    <strong></strong>
+    <span class="short-desc"></span>
+    <span class="see-more">see more</span>
+    <span class="date"></span>
+  </div>
+</template>
+
+<script>
+  var grid = document.getElementById("projects-grid");
+  var detail = document.getElementById("project-detail");
+  var headerText = document.getElementById("projects-header-text");
+  var backBtn = document.getElementById("back-btn");
+  var overlay = document.getElementById("crt-overlay");
+  var detailImg = document.getElementById("detail-img");
+  var detailTitle = document.getElementById("detail-title");
+  var detailDate = document.getElementById("detail-date");
+  var detailLink = document.getElementById("detail-link");
+  var detailDesc = document.getElementById("detail-desc");
+  var detailExtraImgs = document.getElementById("detail-extra-imgs");
+
+  function flashCRT(callback) {
+    overlay.classList.remove("flash");
+    void overlay.offsetWidth;
+    overlay.classList.add("flash");
+    setTimeout(function() {
+      if (callback) callback();
+    }, 90);
+    setTimeout(function() {
+      overlay.classList.remove("flash");
+    }, 200);
+  }
+
+  function openProject(card) {
+    var title = card.getAttribute("data-title");
+    var desc = card.getAttribute("data-desc");
+    var date = card.getAttribute("data-date");
+    var img = card.getAttribute("data-img");
+    var link = card.getAttribute("data-link") || "";
+    var imgs = (card.getAttribute("data-imgs") || "").split("|").map(function(s) { return s.trim(); }).filter(Boolean);
+
+    flashCRT(function() {
+      grid.style.display = "none";
+      detail.style.display = "block";
+      headerText.textContent = "Projects / " + title;
+      backBtn.style.display = "inline-block";
+      detailTitle.textContent = title;
+      detailDate.textContent = date;
+      if (link) {
+        detailLink.href = link;
+        detailLink.textContent = link;
+        detailLink.style.display = "inline";
+      } else {
+        detailLink.style.display = "none";
+      }
+      detailDesc.innerHTML = desc.replace(/\n/g, "<br>");
+      detailImg.src = img;
+      detailExtraImgs.innerHTML = "";
+      if (imgs.length) {
+        for (var n = 0; n < imgs.length; n++) {
+          var el = document.createElement("img");
+          el.className = "placeholder";
+          el.src = imgs[n];
+          el.alt = "Project image " + (n + 1);
+          detailExtraImgs.appendChild(el);
+        }
+        detailExtraImgs.style.display = "flex";
+      } else {
+        detailExtraImgs.style.display = "none";
+      }
+    });
+  }
+
+  function closeProject() {
+    flashCRT(function() {
+      detail.style.display = "none";
+      grid.style.display = "flex";
+      headerText.textContent = "Projects";
+      backBtn.style.display = "none";
+    });
+  }
+
+  /* Populate cards from template */
+  var tpl = document.getElementById("project-card-tpl");
+  var cards = document.querySelectorAll(".project-card");
+  for (var i = 0; i < cards.length; i++) {
+    var c = cards[i];
+    var clone = tpl.content.cloneNode(true);
+    clone.querySelector("img").src = c.getAttribute("data-img") || "";
+    clone.querySelector("strong").textContent = c.getAttribute("data-title") || "";
+    clone.querySelector(".short-desc").textContent = c.getAttribute("data-short-desc") || "";
+    clone.querySelector(".date").textContent = c.getAttribute("data-date") || "";
+    c.appendChild(clone);
+  }
+
+  /* Bind all project cards */
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].addEventListener("click", (function(card) {
+      return function() { openProject(card); };
+    })(cards[i]));
+  }
+
+  backBtn.addEventListener("click", closeProject);
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && detail.style.display === "block") {
+      closeProject();
+    }
+  });
+
+  /* ── Scroll-wheel: convert vertical wheel to horizontal scroll
+       on .project-scroll containers ── */
+  var hScrollers = document.querySelectorAll(".project-scroll");
+  for (var j = 0; j < hScrollers.length; j++) {
+    hScrollers[j].addEventListener("wheel", function(e) {
+      /* Only hijack if this container actually overflows horizontally */
+      if (this.scrollWidth > this.clientWidth) {
+        e.preventDefault();
+        this.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+  }
+</script>
+
+</body>
+</html>
