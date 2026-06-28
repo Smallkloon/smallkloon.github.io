@@ -640,14 +640,13 @@
 
                   The algorithm works as follows:
 
-                      place special tiles (start, end, and checkpoint rooms) either at fixed or random positions
-                      tile the plane with prefab tiles of given shapes
-                      construct a graph with nodes of tiles and edges of shared edges between tiles, excluding edges shared by two special tiles
-                      choose a random distance between start and end based on config settings
-                      map a path in the graph through each checkpoint from start to end, place doors along the relevant edges
-                      using the graph and root path, iteratively construct a tree with branching
-                      finally, assign a certain number of puzzle rooms to either dead-end 1x1s or subtiles of larger rooms not connected to a door
-
+                  - place special tiles (start, end, and checkpoint rooms) either at fixed or random positions
+                  - tile the plane with prefab tiles of given shapes
+                  - construct a graph with nodes of tiles and edges of shared edges between tiles, excluding edges shared by two special tiles
+                  - choose a random distance between start and end based on config settings
+                  - map a path in the graph through each checkpoint from start to end, place doors along the relevant edges
+                  - using the graph and root path, iteratively construct a tree with branching
+                  - finally, assign a certain number of puzzle rooms to either dead-end 1x1s or subtiles of larger rooms not connected to a door
 
                   I find it funny how so many problems converge on graph theory, graphs are truly the crabs of mathematics. I hope to use this project in a proper game soon! I'll maybe also make a clicky-clicky UI so people can experiment with different settings.
 
