@@ -552,7 +552,21 @@
             <div class="project-card"
                  data-title="Mahjong 8-S"
                  data-short-desc="ULTRAKILL Mahjong Solitaire custom level and solvability."
-                 data-desc="Full project description goes here. Replace this with real content."
+                 data-desc="[TBD Video Playthrough]
+                 
+                 Mahjong 8-S was a custom level made entirely by me and my first custom-scripted level that required mods to play. The artstyle is inspired by the game 'Monument Valley' and leans heavily on the use of fog, lighting effects, and colour theory. The music is created by Woosp.
+                 
+                 All of the tiles (except for the archangel flower tiles) were created by me in Aseprite.
+                 
+                 Mahjong 8-S was originally a joke that was consistently brought up in the ULTRAKILL Discord Server, but I decided to make it into something real, we'll see if the real Mahjong 8-S is as good as the fanmade version. Big shoes to fill.
+                 
+                 It was very important to me that the game was fair, which meant that it needed to guarantee solvable boards. It was also important to me that the boards were unbiased, which is an NP-complete problem. I solved this problem by constructing a DAG circuit (ANDS for all LEFT, RIGHT, ABOVE for tiles ; then solvable if ABOVE AND [RIGHT OR LEFT]) of the tile 'slots' and how they restrict each others availability, then, monte carloing the shit out of tile assignment, while quickly discarding solutions that the graph deemed insolvable (such as three tiles upstream of each other in the DAG). 
+                 
+                 Not a perfect solution, but part of optimization is knowing when to stop optimizing, and this was as good as I needed for quickly generating solvable boards. Graph theory wins again.
+                 
+                 Something kinda neat about this project is that for the pattern editor (since this algorithm supports arbitrary pattern shapes), I was able to crappily vibecode and launch the web-app in parallel with actual useful work on the custom scripts. Because the app itself didn't have to be good, only the output unity scriptableobject, this completely changed the balance of efficiency; in the past, making and launching a web app would have been completely inviable for such a small project, and I would have ended up manually filling out hundreds of fields in unity. Learned a lot about where and how AI can improve my ability to do work while keeping the quality of the output high.
+                 
+                 Mahjong 8-S is available on AngryLevelLoader."
                  data-date="2026-04-26"
                  data-img="Mahjong.png"></div>
             
@@ -582,7 +596,7 @@
                  data-short-desc="Or, bogotrain; randomly generated LLMs."
                  data-desc="Why do we waste so many GPU hours, resources, power on training LLMs through actual gradient descent and RLHF when we could just choose random model weights, bias, and scaling. Most of the models generated may be completely useless, but you never know! You could always get AGI on your very first try, it's always possible.
                  
-                 Inspired by the library of babel, this project was an experiment and educational tool that randomly generates LLMs to see how changing parameters affects the shape of the random noise that the model outputs (for example, top-k, temperature, context length, and model size). While the chance of generating anything even comprehensible, much less superintelligent, is about as likely as a glass of water spontaneously heating up and boiling at room temperature, it is interesting seeing how parameters are used without being filtered through training. Give it a shot, you might get lucky and bring about AGI!
+                 Inspired by the library of babel, this project was an art project, experiment, and educational tool that randomly generates LLMs to see how changing parameters affects the shape of the random noise that the model outputs (for example, top-k, temperature, context length, and model size). While the chance of generating anything even comprehensible, much less superintelligent, is about as likely as a glass of water spontaneously heating up and boiling at room temperature, it is interesting seeing how parameters are used without being filtered through training. Give it a shot, you might get lucky and bring about AGI!
                  
                   The project supports both gaussian randomness and uniform randomness through urandom; it has a simple cli for talking to and rerolling generated models, and the model parameters are set as arguments when running the program.
                   
